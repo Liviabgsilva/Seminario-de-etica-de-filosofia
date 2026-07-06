@@ -53,7 +53,7 @@
         }
 
         h1, h2, h3 {
-            font-weight: 9000;
+            font-weight: 900;
             color: var(--text-strong);
         }
 
@@ -75,6 +75,7 @@
             padding: 40px 0;
             height: 100%;
             overflow-y: auto;
+            flex-shrink: 0;
         }
 
         .sidebar-header {
@@ -158,7 +159,7 @@
             max-width: 800px;
             height: fit-content;
             /* Fundo levemente escurecido para facilitar a leitura por cima do fundo */
-            background: rgba(0, 0, 0, 0.021);
+            background: rgba(0, 0, 0, 0.05);
             /* backdrop-filter: blur(5px); */
             -webkit-backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0);
@@ -279,17 +280,85 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Responsividade para telas menores (celulares e tablets) */
+        /* --- RESPONSIVIDADE (Celulares e Tablets) --- */
         @media (max-width: 1000px) {
-            body { flex-direction: column; overflow: auto; }
-            #bg-image { 
-                background-position: right bottom; 
-                opacity: 0.4; /* Deixa o fundo mais suave no celular */
+            body { 
+                overflow: auto; /* Permite rolagem no body */
             }
-            aside { width: 100%; height: auto; padding: 20px; }
-            main { padding: 20px; overflow-y: visible; justify-content: center; }
-            #main-wrapper { height: auto; display: flex; flex-direction: column; }
 
+            #bg-image { 
+                left: 0;
+                width: 100vw;
+                background-position: center bottom; 
+                opacity: 0.15; /* Mais suave no celular para facilitar a leitura */
+            }
+
+            #main-wrapper { 
+                height: auto; 
+                display: flex; 
+                flex-direction: column; 
+            }
+
+            aside { 
+                width: 100%; 
+                height: auto; 
+                padding: 30px 15px 15px 15px; 
+                overflow-y: visible;
+            }
+
+            .sidebar-header {
+                padding: 0 15px 15px 15px;
+            }
+
+            .sidebar-header h1 {
+                font-size: 1.6rem;
+            }
+
+            .sidebar-header .integrantes {
+                font-size: 1.2rem;
+            }
+
+            #menu-nav {
+                padding: 0 15px;
+            }
+
+            .nav-item {
+                font-size: 16px;
+                padding: 12px 15px;
+            }
+
+            main { 
+                padding: 15px; 
+                overflow-y: visible; 
+                justify-content: center;
+                height: auto;
+            }
+
+            .page-container {
+                padding: 25px 20px;
+            }
+
+            /* Redução do tamanho das fontes no mobile */
+            .page-title {
+                font-size: 1.8rem;
+                margin-bottom: 20px;
+            }
+
+            .section-block h3 {
+                font-size: 1.3rem;
+            }
+
+            .section-block p, .section-block ul.args-list {
+                font-size: 1.1rem; /* Reduzido de 1.9rem */
+            }
+
+            .questions-list li {
+                font-size: 1.2rem; /* Reduzido de 2rem */
+            }
+
+            .intro-text {
+                font-size: 1.1rem;
+            }
         }
     </style>
 </head>
@@ -451,7 +520,7 @@
             {
                 id: "tema5",
                 titulo: "A Cultura da Exposição (Sharenting)",
-                caso: "O fenômeno do 'Sharenting': responsáveis legais que documentam e monetizam sistematicamente a vida privada de menores, expondo rotinas a uma audiência global.",
+                caso: "O fenômeno do 'Sharenting': responsáveis legais que documentam e monetizam sistematicamente a vida privada de menores, exponto rotinas a uma audiência global.",
                 dilema: "A linha divisória entre a liberdade de compartilhamento pessoal e a mercantilização da intimidade de indivíduos incapazes de consentir.",
                 argumentos: `
                     <span class="args-title">A favor (do compartilhamento parental):</span>
@@ -621,8 +690,14 @@
                 event.target.classList.add('active');
             }
             
-            // Rola para o topo do scroll na área principal
-            document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
+            // Rola para o topo do scroll na área principal dependendo do dispositivo
+            if (window.innerWidth <= 1000) {
+                // Em dispositivos móveis o scroll rola na janela principal (body)
+                window.scrollTo({ top: document.querySelector('main').offsetTop - 20, behavior: 'smooth' });
+            } else {
+                // No desktop o scroll está dentro da tag main
+                document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
+            }
         }
     </script>
 </body>
