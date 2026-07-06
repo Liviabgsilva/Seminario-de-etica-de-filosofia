@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seminário de Ética Aplicada</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+      :root {
+            /* Paleta Minimalista e Formal (Monocromática) */
+            --bg-color: rgba(138, 1, 76, 0.849);
+            --surface-color: #c904660e;
+            --border-color: #ffb6e7;
+            --text-main: #fffdfd;
+            --text-strong: #f8f5f5;
+            --text-muted: #fcf8f8;
+            --accent: #ffffff00;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* --- PLANO DE FUNDO USANDO A SUA IMAGEM --- */
+        #bg-image {
+            position: fixed;
+            top: 0;
+            left: 285px;
+            width: 87vw;
+            height: 100vh;
+            /* Puxa o arquivo de imagem que você enviou */
+            background-image: url('Design sem nome.png');
+            /* Ajusta a imagem para cobrir a tela sem distorcer */
+            background-size: cover; 
+            /* Alinha à direita para não cortar o dinossauro e o globo */
+            background-position: right center; 
+            background-repeat: no-repeat;
+            pointer-events: none; /* O mouse passa direto pela imagem */
+            z-index: 0;
+        }
+
+        h1, h2, h3 {
+            font-weight: 9000;
+            color: var(--text-strong);
+        }
+
+        /* --- LAYOUT PRINCIPAL (SIDEBAR + CONTEÚDO) --- */
+        #main-wrapper {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            z-index: 1; /* Fica acima da imagem de fundo */
+        }
+
+        /* BARRA LATERAL (MENU) */
+        aside {
+            width: 380px;
+            background: transparent;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 0;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 0 30px 20px 30px;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-header .subtitle {
+            font-size: 1rem;
+            color: var(--text-main);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.9rem;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .sidebar-header .integrantes {
+            margin-top: 1px;
+            font-size: 1.6rem;
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        .sidebar-header hr {
+            border: 0;
+            height: 1px;
+            background: var(--border-color);
+            margin-top: 30px;
+        }
+
+        #menu-nav {
+            display: flex;
+            flex-direction: column;
+            padding: 0 20px;
+        }
+
+        .nav-item {
+            background: transparent;
+            color: var(--text-main);
+            border: none;
+            padding: 15px 20px;
+            text-align: left;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 20px;
+            font-weight: 900;
+            transition: all 0.2s ease;
+            border-radius: 6px;
+            margin-bottom: 5px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.2);
+            font-weight: 700;
+        }
+
+        /* ÁREA DE CONTEÚDO */
+        main {
+            flex: 1;
+            height: 100%;
+            overflow-y: auto;
+            padding: 50px;
+            scroll-behavior: smooth;
+            /* Centraliza a caixa de conteúdo se a tela for muito grande */
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .page-container {
+            width: 100%;
+            max-width: 800px;
+            height: fit-content;
+            /* Fundo levemente escurecido para facilitar a leitura por cima do fundo */
+            background: rgba(0, 0, 0, 0.021);
+            /* backdrop-filter: blur(5px); */
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0);
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .page-title {
+            font-size: 2.4rem;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-block {
+            margin-bottom: 35px;
+        }
+
+        .section-block h3 {
+            font-size: 1.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            color: var(--text-strong);
+            display: flex;
+            align-items: center;
+        }
+
+        .section-block p, .section-block ul.args-list {
+            font-size: 1.9rem;
+            line-height: 1.7;
+            color: var(--text-main);
+            text-align: justify;
+        }
+
+        .args-list {
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+        
+        .args-list li {
+            margin-bottom: 10px;
+        }
+
+        .args-title {
+            color: var(--text-strong);
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .questions-list {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 20px;
+        }
+
+        .questions-list li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 15px;
+            font-size: 2rem;
+            color: var(--text-strong);
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        .questions-list li::before {
+            content: "✦";
+            position: absolute;
+            left: 0;
+            color: var(--text-muted);
+        }
+
+        /* PÁGINA INICIAL (INTRO) */
+        .intro-text {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            margin-bottom: 40px;
+        }
+
+        .central-questions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .central-question-item {
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+
+        .central-question-item h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsividade para telas menores (celulares e tablets) */
+        @media (max-width: 1000px) {
+            body { flex-direction: column; overflow: auto; }
+            #bg-image { 
+                background-position: right bottom; 
+                opacity: 0.4; /* Deixa o fundo mais suave no celular */
+            }
+            aside { width: 100%; height: auto; padding: 20px; }
+            main { padding: 20px; overflow-y: visible; justify-content: center; }
+            #main-wrapper { height: auto; display: flex; flex-direction: column; }
+
+        }
+    </style>
+</head>
+<body>
+
+    <div id="bg-image"></div>
+
+    <div id="main-wrapper">
+        
+        <aside>
+            <div class="sidebar-header">
+                <div class="subtitle">Seminário</div>
+                <h1>Ética e Redes Sociais</h1>
+                <div class="integrantes">
+                    Apresentado por:<br>
+                    <strong>Lívia, Julia Dutra, Brenda, Sophia</strong>
+                </div>
+                <hr>
+            </div>
+
+            <nav id="menu-nav">
+                </nav>
+        </aside>
+
+        <main id="pages-container">
+            <div class="page-container">
+                
+                <div id="page-intro" class="page active">
+                    <h2 class="page-title">Introdução e Diretrizes</h2>
+                    <p class="intro-text">
+                        A ascensão das plataformas digitais reconfigurou fundamentalmente as interações humanas. Antes de analisarmos os estudos de caso específicos que compõem este seminário, é necessário estabelecer os questionamentos éticos centrais que guiarão nossa linha de raciocínio crítico:
+                    </p>
+                    
+                    <div class="central-questions-list">
+                        <div class="central-question-item">
+                            <h3>1. Existe um limite objetivo para a liberdade de expressão no ambiente digital?</h3>
+                        </div>
+                        <div class="central-question-item">
+                            <h3>2. O "cancelamento" atua como ferramenta de justiça social ou como mecanismo de linchamento virtual?</h3>
+                        </div>
+                        <div class="central-question-item">
+                            <h3>3. A arquitetura das redes sociais mitiga ou agrava a responsabilidade moral do indivíduo?</h3>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+    </div>
+
+    <script>
+        // --- CONTEÚDO DO SEMINÁRIO ---
+        const temas = [
+            {
+                id: "tema1",
+                titulo: "Cancelamento Virtual",
+                caso: "Caso Justine Sacco (2013). Uma executiva publicou uma piada de teor preconceituoso em seu perfil antes de embarcar em um voo. Durante as horas em que esteve incomunicável, a publicação viralizou em escala global. Ao aterrissar, sua reputação profissional e pessoal havia sido severamente destruída, resultando em demissão imediata.",
+                dilema: "O dilema entre a necessidade de responsabilização pública (accountability) e a desproporcionalidade punitiva, onde o indivíduo é julgado e sentenciado sem o devido processo de defesa.",
+                argumentos: `
+                    <span class="args-title">A favor (da responsabilização digital):</span>
+                    <ul class="args-list">
+                        <li>Dá voz e poder de denúncia a grupos historicamente silenciados contra figuras de poder.</li>
+                        <li>Exige responsabilidade imediata de figuras públicas e marcas por atitudes prejudiciais, burlando a morosidade da justiça.</li>
+                        <li>Estabelece e atualiza limites sociais sobre o que é aceitável, promovendo uma evolução moral coletiva.</li>
+                    </ul>
+                    <span class="args-title">Contra (a prática do cancelamento):</span>
+                    <ul class="args-list">
+                        <li>Foca na punição desproporcional e no linchamento público, inviabilizando o caráter educativo ou a reabilitação.</li>
+                        <li>Elimina o direito à ampla defesa, julgando indivíduos sumariamente com base em fragmentos fora de contexto.</li>
+                        <li>Gera um ambiente de medo, pânico moral e autocensura, sufocando debates intelectuais complexos e genuínos.</li>
+                    </ul>
+                `,
+                filosofo: "Michel Foucault (O Panóptico). A arquitetura das redes sociais funciona como um sistema de vigilância contínua. O medo do escrutínio público e do cancelamento atua como uma prisão disciplinar invisível.",
+                perguntas: [
+                    "A sanção virtual aplicada pelos usuários é proporcional à infração cometida?",
+                    "Qual a legitimidade moral do escrutínio público na internet?",
+                    "O cancelamento promove a educação social ou instaura a censura pelo medo?"
+                ]
+            },
+            {
+                id: "tema2",
+                titulo: "Desinformação e Fake News",
+                caso: "Escândalo Cambridge Analytica (2016). Utilização não autorizada de dados de milhões de usuários para mapeamento psicológico e direcionamento massivo de desinformação personalizada, visando a manipulação do comportamento eleitoral.",
+                dilema: "O embate entre a preservação da verdade factual e a instrumentalização da mentira como ferramenta de engenharia social e aquisição de poder político ou financeiro.",
+                argumentos: `
+                    <span class="args-title">A favor (da moderação e controle rigoroso):</span>
+                    <ul class="args-list">
+                        <li>Protege a integridade de processos democráticos e eleições contra manipulações estruturadas.</li>
+                        <li>Evita danos reais e físicos à saúde pública (como ocorreu na desinformação sobre vacinas).</li>
+                        <li>Impede que indivíduos e corporações lucrem financeiramente espalhando pânico e mentiras.</li>
+                    </ul>
+                    <span class="args-title">Contra (as políticas de controle como risco de censura):</span>
+                    <ul class="args-list">
+                        <li>Atribuir o poder de decidir o que é "verdade" abre graves precedentes para censura política.</li>
+                        <li>O excesso de regulação pune antecipadamente e fere o princípio inalienável da liberdade de expressão.</li>
+                        <li>Pode silenciar denúncias legítimas que inicialmente parecem falsas, mas se provam verdadeiras futuramente.</li>
+                    </ul>
+                `,
+                filosofo: "Immanuel Kant (O Imperativo Categórico). Para Kant, a mentira é inerentemente imoral, pois corrói a base fundamental da confiança humana. Se a desinformação for universalizada, a própria comunicação entra em colapso estrutural.",
+                perguntas: [
+                    "As corporações de tecnologia devem ser judicialmente responsabilizadas pelo conteúdo que hospedam?",
+                    "Onde se estabelece a fronteira entre uma opinião equivocada e a desinformação deliberada?",
+                    "A regulamentação estatal sobre a verdade factual incorre em risco de censura institucional?"
+                ]
+            },
+            {
+                id: "tema3",
+                titulo: "Cyberbullying",
+                caso: "Caso Amanda Todd (2012). Uma adolescente canadense foi vítima de extorsão e assédio psicológico severo através das redes sociais após o vazamento de imagens íntimas. A perseguição contínua culminou em seu suicídio.",
+                dilema: "A tensão entre a proteção garantida pelo anonimato digital e a erosão da empatia humana. O distanciamento físico fomenta agressões que raramente ocorreriam em interações presenciais.",
+                argumentos: `
+                    <span class="args-title">A favor (da identificação e punição):</span>
+                    <ul class="args-list">
+                        <li>A quebra do anonimato facilita a responsabilização legal e diminui a impunidade.</li>
+                        <li>Protege o bem-estar psicológico de vítimas que sofrem agressões contínuas dentro de suas casas.</li>
+                        <li>Força a sociedade a tratar agressões virtuais com a mesma seriedade das agressões físicas.</li>
+                    </ul>
+                    <span class="args-title">Contra (medidas punitivas extremas e fim do anonimato):</span>
+                    <ul class="args-list">
+                        <li>A abolição total do anonimato digital coloca em risco ativistas e denunciantes de regimes opressores.</li>
+                        <li>A criminalização severa pode arruinar o futuro de jovens por ações derivadas de imaturidade.</li>
+                        <li>Há uma linha subjetiva difícil de legislar entre humor/brincadeira e assédio intencional.</li>
+                    </ul>
+                `,
+                filosofo: "Jean-Jacques Rousseau. Segundo Rousseau, as estruturas sociais têm o potencial de corromper a moralidade humana. O ciberespaço atua como um novo ambiente social que desinibe instintos agressivos.",
+                perguntas: [
+                    "A garantia de anonimato na internet deveria ser revogada em prol da responsabilização legal?",
+                    "Qual a extensão do dever das escolas na regulação do comportamento digital dos alunos?",
+                    "O arcabouço jurídico vigente é suficiente para punir a violência psicológica digital?"
+                ]
+            },
+            {
+                id: "tema4",
+                titulo: "Ética na Influência Digital",
+                caso: "A promoção massiva de plataformas ilegais de jogos de azar por influenciadores digitais brasileiros, prometendo retornos financeiros irreais e resultando no endividamento da população.",
+                dilema: "O conflito direto entre a monetização da influência pessoal e a responsabilidade fiduciária e moral para com a audiência.",
+                argumentos: `
+                    <span class="args-title">A favor (da regulação de criadores):</span>
+                    <ul class="args-list">
+                        <li>Protege consumidores vulneráveis da exploração por esquemas predatórios e fraudes.</li>
+                        <li>Cobra ética nas relações parassociais (onde a audiência confia no influenciador como amigo).</li>
+                        <li>Obriga o mercado digital a seguir as regras éticas aplicadas à publicidade tradicional.</li>
+                    </ul>
+                    <span class="args-title">Contra (da responsabilização excessiva):</span>
+                    <ul class="args-list">
+                        <li>Infringe a autonomia do consumidor adulto em tomar e assumir os riscos de suas escolhas.</li>
+                        <li>A responsabilidade solidária pode inviabilizar a profissão de pequenos criadores.</li>
+                        <li>O próprio influenciador muitas vezes é enganado pela empresa patrocinadora.</li>
+                    </ul>
+                `,
+                filosofo: "Aristóteles (Ética das Virtudes). A filosofia aristotélica centraliza-se no caráter moral. Um influenciador que promove produtos deletérios em prol do ganho financeiro carece de virtude.",
+                perguntas: [
+                    "O influenciador deve possuir responsabilidade solidária em casos de fraude promovida por ele?",
+                    "É necessária a formulação de um código de ética formal para a profissão de influenciador?",
+                    "Quais são os limites da autonomia do consumidor frente a uma publicidade predatória?"
+                ]
+            },
+            {
+                id: "tema5",
+                titulo: "A Cultura da Exposição (Sharenting)",
+                caso: "O fenômeno do 'Sharenting': responsáveis legais que documentam e monetizam sistematicamente a vida privada de menores, expondo rotinas a uma audiência global.",
+                dilema: "A linha divisória entre a liberdade de compartilhamento pessoal e a mercantilização da intimidade de indivíduos incapazes de consentir.",
+                argumentos: `
+                    <span class="args-title">A favor (do compartilhamento parental):</span>
+                    <ul class="args-list">
+                        <li>Criação de redes de apoio valiosas sobre os desafios reais da paternidade/maternidade.</li>
+                        <li>Atua como um diário acessível para conectar-se com familiares geograficamente distantes.</li>
+                        <li>Resguarda a autoridade dos pais em decidirem a melhor forma de representar sua família.</li>
+                    </ul>
+                    <span class="args-title">Contra (a exposição monetizada):</span>
+                    <ul class="args-list">
+                        <li>Fere o direito à privacidade da criança e rouba seu futuro "direito ao esquecimento".</li>
+                        <li>Expõe menores a graves riscos de segurança cibernética e roubo de identidade.</li>
+                        <li>Submete o desenvolvimento infantil à constante busca por aprovação e métricas de redes sociais.</li>
+                    </ul>
+                `,
+                filosofo: "Guy Debord (A Sociedade do Espetáculo). Na contemporaneidade digital, a vivência autêntica é secundária; o valor primário reside na transformação da intimidade em uma representação imagética consumível.",
+                perguntas: [
+                    "O indivíduo, ao atingir a maioridade, possui o direito de processar seus responsáveis pela exposição pregressa?",
+                    "A superexposição digital resultou na banalização definitiva do conceito de privacidade?",
+                    "Como a economia da atenção altera as escolhas morais na criação dos filhos?"
+                ]
+            },
+            {
+                id: "tema6",
+                titulo: "A Moralidade dos Algoritmos",
+                caso: "Documentações internas evidenciaram que o algoritmo de recomendação de certas redes priorizava conteúdos polarizadores para maximizar a retenção de tempo dos usuários.",
+                dilema: "O imperativo corporativo do lucro publicitário operando em detrimento direto da saúde mental dos usuários e da estabilidade sociopolítica.",
+                argumentos: `
+                    <span class="args-title">A favor (da regulação estatal e transparência):</span>
+                    <ul class="args-list">
+                        <li>Diminui a polarização impedindo que códigos criem bolhas extremistas para lucrar com o ódio.</li>
+                        <li>Protege a saúde mental coletiva quebrando ciclos de vício em conteúdos tóxicos.</li>
+                        <li>Traz transparência sobre escolhas que ditam o comportamento de bilhões de pessoas.</li>
+                    </ul>
+                    <span class="args-title">Contra (da manutenção do livre mercado):</span>
+                    <ul class="args-list">
+                        <li>Códigos algorítmicos são segredos industriais; expô-los quebra a competitividade tecnológica.</li>
+                        <li>Algoritmos apenas refletem e entregam interesses preexistentes que os usuários buscam.</li>
+                        <li>Regulações estritas poderiam arruinar a experiência tornando as recomendações irrelevantes.</li>
+                    </ul>
+                `,
+                filosofo: "Martin Heidegger (A Questão da Técnica). Para Heidegger, a tecnologia não é neutra. Os algoritmos exemplificam o 'Enquadramento': a redução do ser humano a um mero 'fundo de reserva' (dados) a ser extraído.",
+                perguntas: [
+                    "É conceitualmente possível atribuir 'imoralidade' a um código de programação?",
+                    "A transparência algorítmica deveria ser uma exigência regulatória dos Estados?",
+                    "Até que ponto a deliberação humana permanece autônoma quando a informação é manipulada invisivelmente?"
+                ]
+            },
+            {
+                id: "tema7",
+                titulo: "Proliferação do Ódio Online",
+                caso: "A instrumentalização de plataformas digitais por grupos extremistas para o recrutamento ideológico, propagação de ódio e planejamento de atos de violência (ex: ataques em escolas).",
+                dilema: "A proteção da liberdade de expressão em contraposição ao dever de prevenir a violência e proteger as garantias fundamentais de grupos minoritários.",
+                argumentos: `
+                    <span class="args-title">A favor (da moderação enérgica):</span>
+                    <ul class="args-list">
+                        <li>Atua de forma preventiva salvando vidas ao desmantelar células violentas.</li>
+                        <li>Impede que o discurso de ódio afaste grupos minoritários do debate público seguro.</li>
+                        <li>Reitera que o ódio e a incitação ao crime não são opiniões amparadas pela liberdade de expressão.</li>
+                    </ul>
+                    <span class="args-title">Contra (do excesso de moderação):</span>
+                    <ul class="args-list">
+                        <li>"Discurso de ódio" é subjetivo e pode ser manobrado para censurar opositores políticos.</li>
+                        <li>Banir agentes extremistas apenas os joga para a deep web, onde se radicalizam ocultos.</li>
+                        <li>Confere às grandes corporações poder ditatorial para arbitrar quem pode falar.</li>
+                    </ul>
+                `,
+                filosofo: "Karl Popper (O Paradoxo da Tolerância). Popper postula que uma tolerância ilimitada conduz ao colapso da própria tolerância. Estender a tolerância aos ativamente intolerantes destrói as bases democráticas.",
+                perguntas: [
+                    "Quais são os critérios objetivos para distinguir humor questionável de incitação ao ódio?",
+                    "Corporações privadas detêm legitimidade para banir indivíduos do debate público?",
+                    "A resposta institucional primária ao ódio online deve ser punitiva ou educacional?"
+                ]
+            },
+            {
+                id: "tema8",
+                titulo: "Conflitos de Jurisdição e Soberania",
+                caso: "O embate envolvendo ordens judiciais de bloqueio de perfis por alegação de ataques às instituições, resultando na recusa corporativa de plataformas como o X (Twitter).",
+                dilema: "A soberania jurídica de um Estado-Nação contra o princípio da liberdade de expressão irrestrita defendido por conglomerados transnacionais.",
+                argumentos: `
+                    <span class="args-title">A favor (da soberania estatal e subordinação):</span>
+                    <ul class="args-list">
+                        <li>Empresas que atuam e lucram no território nacional devem sujeição inquestionável às leis do país.</li>
+                        <li>Garante que o Estado possa agir em defesa de suas próprias instituições democráticas.</li>
+                        <li>Evita um "imperialismo digital" onde bilionários estrangeiros ditam regras locais.</li>
+                    </ul>
+                    <span class="args-title">Contra (das intervenções judiciais rígidas):</span>
+                    <ul class="args-list">
+                        <li>Ordens judiciais podem cruzar a linha do abuso de poder estabelecendo regimes de censura.</li>
+                        <li>A fragmentação jurisdicional destrói o propósito da internet como um espaço global livre.</li>
+                        <li>O bloqueio abrupto de plataformas prejudica comunicação e trabalho de cidadãos inocentes.</li>
+                    </ul>
+                `,
+                filosofo: "John Stuart Mill (O Princípio do Dano). Embora defenda a liberdade de expressão, Mill estabeleceu um limite claro: o exercício da liberdade individual cessa no momento em que gera um dano objetivo a terceiros.",
+                perguntas: [
+                    "A concentração da esfera pública digital em mãos privadas representa uma falha democrática?",
+                    "Quais as implicações quando corporações transnacionais ignoram determinações judiciais?",
+                    "O conceito de liberdade de expressão abrange o direito de organizar campanhas contra a própria estrutura democrática?"
+                ]
+            }
+        ];
+
+        const menuNav = document.getElementById('menu-nav');
+        const pagesContainer = document.querySelector('.page-container');
+
+        // Botão Fixo de Introdução
+        const introBtn = document.createElement('button');
+        introBtn.className = 'nav-item active';
+        introBtn.innerText = 'Introdução e Diretrizes';
+        introBtn.onclick = (event) => showPage('intro', event);
+        menuNav.appendChild(introBtn);
+
+        // Gerar páginas dinâmicas e menus
+        temas.forEach((tema, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'nav-item';
+            btn.innerText = `${index + 1}. ${tema.titulo}`;
+            btn.onclick = (event) => showPage(tema.id, event);
+            menuNav.appendChild(btn);
+
+            const pageDiv = document.createElement('div');
+            pageDiv.id = `page-${tema.id}`;
+            pageDiv.className = 'page';
+            
+            let perguntasHTML = '';
+            tema.perguntas.forEach(p => {
+                perguntasHTML += `<li>${p}</li>`;
+            });
+
+            pageDiv.innerHTML = `
+                <h2 class="page-title">${index + 1}. ${tema.titulo}</h2>
+                <div class="section-block">
+                    <h3>Contexto e Estudo de Caso</h3>
+                    <p>${tema.caso}</p>
+                </div>
+                <div class="section-block">
+                    <h3>O Dilema Ético</h3>
+                    <p>${tema.dilema}</p>
+                </div>
+                <div class="section-block">
+                    <h3>Contraposição de Argumentos</h3>
+                    <div style="margin-top: 15px;">${tema.argumentos}</div>
+                </div>
+                <div class="section-block">
+                    <h3>Fundamentação Filosófica</h3>
+                    <p>${tema.filosofo}</p>
+                </div>
+                <div class="section-block" style="margin-top: 40px;">
+                    <h3>Questões para Deliberação</h3>
+                    <ul class="questions-list">
+                        ${perguntasHTML}
+                    </ul>
+                </div>
+            `;
+            
+            pagesContainer.appendChild(pageDiv);
+        });
+
+        // Função de navegação
+        function showPage(pageId, event) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+
+            document.getElementById(`page-${pageId}`).classList.add('active');
+            
+            if(event) {
+                event.target.classList.add('active');
+            }
+            
+            // Rola para o topo do scroll na área principal
+            document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
