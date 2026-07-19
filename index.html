@@ -214,6 +214,15 @@
             margin-bottom: 10px;
         }
 
+        .case-image {
+            width: 100%;
+            max-height: 420px;
+            object-fit: cover;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 15px;
+        }
+
         .args-title {
             color: var(--text-strong);
             display: block;
@@ -416,7 +425,8 @@
             {
                 id: "tema1",
                 titulo: "Cancelamento Virtual",
-                caso: "Caso Justine Sacco (2013). Uma executiva publicou uma piada de teor preconceituoso em seu perfil antes de embarcar em um voo. Durante as horas em que esteve incomunicável, a publicação viralizou em escala global. Ao aterrissar, sua reputação profissional e pessoal havia sido severamente destruída, resultando em demissão imediata.",
+                caso: "Caso Justine Sacco (2013). Uma executiva publicou a frase: 'Indo para a África. Espero não contrair Aids. Brincadeira. Sou branca.' em seu perfil antes de embarcar em um voo. Durante as horas em que esteve incomunicável, a publicação viralizou em escala global. Ao aterrissar, sua reputação profissional e pessoal havia sido severamente destruída, resultando em demissão imediata.",
+                imagem: "https://i.guim.co.uk/img/static/sys-images/Guardian/Pix/pictures/2013/12/22/1387732606928/Justine-Sacco-008.jpg?width=465&dpr=1&s=none&crop=none",
                 dilema: "O dilema entre a necessidade de responsabilização pública (accountability) e a desproporcionalidade punitiva, onde o indivíduo é julgado e sentenciado sem o devido processo de defesa.",
                 argumentos: `
                     <span class="args-title">A favor (da responsabilização digital):</span>
@@ -435,9 +445,9 @@
                 filosofo: "Michel Foucault (O Panóptico). A arquitetura das redes sociais funciona como um sistema de vigilância contínua. O medo do escrutínio público e do cancelamento atua como uma prisão disciplinar invisível.",
                 perguntas: [
                     "A sanção virtual aplicada pelos usuários é proporcional à infração cometida?",
-                    "Qual a legitimidade moral do escrutínio público na internet?",
                     "O cancelamento promove a educação social ou instaura a censura pelo medo?"
                 ]
+                
             },
             {
                 id: "tema2",
@@ -656,6 +666,12 @@
                     <h3>Contexto e Estudo de Caso</h3>
                     <p>${tema.caso}</p>
                 </div>
+                ${tema.imagem ? `
+                    <div class="section-block">
+                        <h3>Imagem do Caso</h3>
+                        <img class="case-image" src="${tema.imagem}" alt="Justine Sacco">
+                    </div>
+                ` : ''}
                 <div class="section-block">
                     <h3>O Dilema Ético</h3>
                     <p>${tema.dilema}</p>
